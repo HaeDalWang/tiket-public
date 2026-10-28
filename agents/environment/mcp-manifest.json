@@ -1,0 +1,132 @@
+{
+  "manifest_version": 1,
+  "as_of": "2026-09-03",
+  "purpose": "Single secret-free source of truth for project-scoped MCP capability. Host configuration files are generated from this manifest by scripts/render_agent_configs.py and verified by scripts/validate_workspace.py. Never add credentials, API keys, tokens, or header values here.",
+  "boundary": "Documentation and public web research only. Customer AWS account access is exclusively the broker-mediated aws-customer-account-ops skill, which is user-level, credential-bearing, externally owned, and therefore never committed to this repository.",
+  "enforcement_layers": [
+    "Layer 1 - server side, host independent: mcp-proxy-for-aws runs with --read-only, which drops every tool not annotated readOnlyHint=true, and with --skip-auth so no AWS credential is presented.",
+    "Layer 2 - host side: each generated host configuration denies the blocked tool list. Codex additionally expresses an exact allow list.",
+    "Layer 1 alone is not sufficient because --read-only still leaves read-capable tools that this repository does not route. Layer 2 alone is not sufficient because Kiro and Claude Code express deny lists rather than allow lists, so a newly added upstream tool would otherwise appear."
+  ],
+  "servers": [
+    {
+      "id": "aws-docs",
+      "capability": "aws-official-research",
+      "upstream": "aws/agent-toolkit-for-aws",
+      "transport": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-proxy-for-aws@1.6.4",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--skip-auth",
+        "--read-only",
+        "--region",
+        "us-east-1",
+        "--log-level",
+        "ERROR"
+      ],
+      "pinned_version": "mcp-proxy-for-aws@1.6.4",
+      "prerequisite": "uv",
+      "authentication": "none",
+      "classification": "read-only-documentation",
+      "required_env": [],
+      "allowed_tools": [
+        "aws___search_documentation",
+        "aws___read_documentation",
+        "aws___list_regions",
+        "aws___get_regional_availability"
+      ],
+      "blocked_tools": [
+        "aws___call_aws",
+        "aws___run_script",
+        "aws___get_presigned_url",
+        "aws___get_tasks",
+        "aws___retrieve_skill"
+      ],
+      "blocked_tool_reasons": {
+        "aws___call_aws": "Direct AWS API execution. Customer-account access must go through the broker.",
+        "aws___run_script": "Sandboxed script execution. Not a routed capability.",
+        "aws___get_presigned_url": "Produces a credentialed URL.",
+        "aws___get_tasks": "Read-only but not a routed capability; keeps the tool catalog small.",
+        "aws___retrieve_skill": "Fetches external skill text that would bypass repository routing."
+      },
+      "smoke_test": "python3 scripts/verify_mcp_servers.py --server aws-docs",
+      "evidence": {
+        "observed_on": "2026-09-03",
+        "method": "stdio initialize + tools/list against the pinned proxy with no AWS credential",
+        "tools_without_read_only": 9,
+        "tools_with_read_only": 6,
+        "dropped_by_read_only": [
+          "aws___call_aws",
+          "aws___get_presigned_url",
+          "aws___run_script"
+        ],
+        "remaining_after_read_only": [
+          "aws___get_tasks",
+          "aws___get_regional_availability",
+          "aws___list_regions",
+          "aws___read_documentation",
+          "aws___retrieve_skill",
+          "aws___search_documentation"
+        ]
+      }
+    },
+    {
+      "id": "exa",
+      "capability": "current-web-research",
+      "upstream": "exa-labs/exa-mcp-server",
+      "transport": "http",
+      "url": "https://mcp.exa.ai/mcp",
+      "pinned_version": "hosted-endpoint",
+      "prerequisite": "none",
+      "authentication": "anonymous",
+      "classification": "read-only-web",
+      "required_env": [],
+      "allowed_tools": [
+        "web_search_exa",
+        "web_fetch_exa"
+      ],
+      "blocked_tools": [],
+      "blocked_tool_reasons": {},
+      "smoke_test": "python3 scripts/verify_mcp_servers.py --server exa",
+      "evidence": {
+        "observed_on": "2026-09-03",
+        "method": "streamable HTTP initialize + tools/list in anonymous mode",
+        "server_info": "exa-search-server 3.2.1",
+        "tools_discovered": 2,
+        "remaining_after_read_only": [
+          "web_search_exa",
+          "web_fetch_exa"
+        ]
+      },
+      "data_handling": "Never send customer names, contacts, Account or Payer IDs, IPs, CIDRs, confidential ticket text, or credentials to this endpoint."
+    }
+  ],
+  "hosts": [
+    {
+      "id": "kiro",
+      "config_path": ".kiro/settings/mcp.json",
+      "tool_control": "deny-list",
+      "notes": "Kiro supports disabledTools only. Layer 1 --read-only is what stops an unlisted write tool from appearing."
+    },
+    {
+      "id": "claude-code",
+      "config_path": ".mcp.json",
+      "permissions_path": ".claude/settings.json",
+      "tool_control": "deny-list",
+      "notes": "Server definitions live in .mcp.json; tool denial lives in .claude/settings.json permissions.deny using mcp__<server>__<tool>."
+    },
+    {
+      "id": "codex",
+      "config_path": ".codex/config.toml",
+      "tool_control": "allow-list",
+      "notes": "Codex supports enabled_tools, so the exact allow list is expressed directly. Project-scoped config applies to trusted projects only."
+    },
+    {
+      "id": "hermes",
+      "config_path": null,
+      "tool_control": "allow-list",
+      "notes": "Hermes stores MCP configuration in its own profile, not in the repository. Configure it to match this manifest and record the result in agents/runtime-status.md."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# Generated from agents/environment/mcp-manifest.json by scripts/render_agent_configs.py. Do not edit by hand.
+
+[mcp_servers.aws-docs]
+command = "uvx"
+args = ["mcp-proxy-for-aws@1.6.4", "https://aws-mcp.us-east-1.api.aws/mcp", "--skip-auth", "--read-only", "--region", "us-east-1", "--log-level", "ERROR"]
+enabled_tools = ["aws___search_documentation", "aws___read_documentation", "aws___list_regions", "aws___get_regional_availability"]
+disabled_tools = ["aws___call_aws", "aws___run_script", "aws___get_presigned_url", "aws___get_tasks", "aws___retrieve_skill"]
+enabled = true
+default_tools_approval_mode = "auto"
+
+[mcp_servers.exa]
+url = "https://mcp.exa.ai/mcp"
+enabled_tools = ["web_search_exa", "web_fetch_exa"]
+enabled = true
+default_tools_approval_mode = "auto"
+
+
+[[hooks.SessionStart]]
+matcher = "startup|resume"
+
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = "bash scripts/check-freshness.sh; python3 scripts/report_usage.py --if-due"
+command_windows = "pwsh -NoProfile -File scripts/session-start.ps1"
+statusMessage = "Updating the workspace if safe, then sending usage metrics (no customer content)"

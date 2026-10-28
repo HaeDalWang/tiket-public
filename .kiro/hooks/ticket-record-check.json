@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "tiket-ticket-record-check",
+      "trigger": "PostFileSave",
+      "matcher": "(^|/)tickets/[^/]+\\.md$",
+      "action": {
+        "type": "agent",
+        "prompt": "You just saved a ticket record under tickets/. Before you end this turn, run `python3 scripts/check_ticket_record.py <ticket id>` on it (use `python` if `python3` is missing). If it reports FAIL, fix the record and run it again. If it reports PASS, or you already saw PASS for the current content, do nothing further for this notice."
+      }
+    }
+  ]
+}

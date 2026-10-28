@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-24 KST",
+  "sources": [
+    {
+      "id": "SRC-CUSTOMER-SECURITY-001",
+      "filename_nfc": "# 고객 보안 정보 보관 및 공유 관련 주의사항.txt",
+      "lines": 288,
+      "sha256": "6402c546d616cbb0109d8dc37fc16d520139c3710ab25f0f5c6612d26eb0670e"
+    },
+    {
+      "id": "SRC-EMPLOYEE-LIFECYCLE-001",
+      "filename_nfc": "# 직원 온:오프보딩 가이드라인.txt",
+      "lines": 465,
+      "sha256": "873d7d805d2a2274d2d47c0d59764dec581756df9a3807f0745a45b31d6077eb"
+    },
+    {
+      "id": "SRC-CSG-JD-001",
+      "filename_nfc": "# CSG Job Description.txt",
+      "lines": 239,
+      "sha256": "8d0d865d91084c53676d019b0ed3ab8c8e0b3cd08f9cf02956d5cb9ef40190e6"
+    },
+    {
+      "id": "SRC-CSG-RISK-001",
+      "filename_nfc": "# CSG 리스크 관리.txt",
+      "lines": 458,
+      "sha256": "489a06cc86ffba7084c3a25b70b360942a8f1b51d8c0617048fd161032e8aadc"
+    },
+    {
+      "id": "SRC-CUSTOMER-OFFBOARD-001",
+      "filename_nfc": "# 고객 Offboarding 프로세스 및 데이터 관리.txt",
+      "lines": 670,
+      "sha256": "e31efb255394305a70cbd615b97b34dd7e44e3bf804b4a7bdb45d3b7baf68d60"
+    },
+    {
+      "id": "SRC-STANDALONE-PAYER-001",
+      "filename_nfc": "단독 Payer 관리 방안.txt",
+      "lines": 766,
+      "sha256": "7aa9991598ae354011137184c0c2dc536835e16972bb905be585ddb4a6aee256"
+    },
+    {
+      "id": "SRC-CUSTOMER-ONBOARD-001",
+      "filename_nfc": "# 고객 Onboarding 체크리스트.txt",
+      "lines": 468,
+      "sha256": "ca56fd9e3bbe1df0f5f8def4d02dace1ca72d0e1163777639264319fb90dcecf"
+    },
+    {
+      "id": "SRC-MIGRATION-MEETING-001",
+      "filename_nfc": "# 클라우드 마이그레이션 첫 비즈니스 미팅 가이드.txt",
+      "lines": 304,
+      "sha256": "60093dd2294135dc67972708fa4f8a84a62c8eb0dd94075d402db16a1685597b"
+    },
+    {
+      "id": "SRC-BILLING-TERMS-001",
+      "filename_nfc": "# 빌링 플랫폼 MSP 서비스 표준 약관.txt",
+      "lines": 251,
+      "sha256": "8ad61b05dc3513085aaf1d45c5728e0b8798b86246ca9cd57e69d0074c0c6ad2"
+    },
+    {
+      "id": "SRC-SA-JD-001",
+      "filename_nfc": "SA Team Job Description.txt",
+      "lines": 97,
+      "sha256": "5e3260629e88927b97b647d732de2859937d8342bdbe96cfa39aaace5c25b69e"
+    },
+    {
+      "id": "SRC-MSP-JD-001",
+      "filename_nfc": "MSP Team Job Description.txt",
+      "lines": 87,
+      "sha256": "0a72207ca78c5071da389eda5e34cbe61529c79e49794b740d84e659e56301d7"
+    },
+    {
+      "id": "SRC-TS-JD-001",
+      "filename_nfc": "TS Team Job Description.txt",
+      "lines": 79,
+      "sha256": "14827e3068c50aefbc1f0e55c5afd3290cd724422d16292355add7fe1fecbea1"
+    },
+    {
+      "id": "SRC-AI-JD-001",
+      "filename_nfc": "AI Team Job Description.txt",
+      "lines": 71,
+      "sha256": "df09e1932cf13a5edc4dfd1a518163d3f4f2e447bcb5cca1af2a8efa984b3166"
+    },
+    {
+      "id": "SRC-COP-JD-001",
+      "filename_nfc": "COP Team Job Description.txt",
+      "lines": 69,
+      "sha256": "5164ad0a34b86598bb9303e6fb7a24df6b554caaef99c6af69182ecd875fce4a"
+    },
+    {
+      "id": "SRC-HR-STRUCTURE-001",
+      "filename_nfc": "HR 체계.txt",
+      "lines": 106,
+      "sha256": "4b0e81248c94e9c22c3762e92e896475ee3409225a77d78d2ecc0a8c6484e92e"
+    },
+    {
+      "id": "SRC-COC-GUIDE-001",
+      "filename_nfc": "COC노티가이드.txt",
+      "lines": 270,
+      "sha256": "96fd63751e5f8e872a4cfd40a6ef4dfbf77d7f6dbaf97653d0fe779f53d1c5f9"
+    },
+    {
+      "id": "SRC-TS-NOTES-001",
+      "filename_nfc": "TS 주요 사항.txt",
+      "lines": 119,
+      "sha256": "3787dd65ffad1917b6e9165403f70ea22a100f5bc721f4ae67685d2e6f9ce14d"
+    },
+    {
+      "id": "SRC-COP-QA-001",
+      "filename_nfc": "COP Q&ACMP팀에 질문하신 내용 정리.txt",
+      "lines": 96,
+      "sha256": "f777d44a47e579a4c8235e6c672b08f4bc4676ecd061d16c5af6d10fe03c4a14"
+    },
+    {
+      "id": "SRC-COST-ESC-001",
+      "path": "policy/excerpts/SRC-COST-ESC-001-cost-inquiry-csr-handoff.md",
+      "lines": 41,
+      "sha256": "d71860a14dcc83ab67e8bd555ec5c49be5cf79e01698a03ac048fe7e45a75b6e"
+    },
+    {
+      "id": "SRC-SUPPORT-PLAN-001",
+      "path": "policy/excerpts/SRC-SUPPORT-PLAN-001-billing-platform-support-plan-codes.md",
+      "lines": 43,
+      "sha256": "b2e595de77b89f34d336151983244eaabea56b9bf6e0af6469b480305348570e"
+    },
+    {
+      "id": "SRC-TAM-001",
+      "path": "policy/excerpts/SRC-TAM-001-aws-tam-request.md",
+      "lines": 22,
+      "sha256": "3b28dc76fc6fe1077ac187074985e0e2e40b879d11293b9cad71f7f206019514"
+    },
+    {
+      "id": "SRC-OT-001",
+      "path": "policy/excerpts/SRC-OT-001-after-hours-ticket-record.md",
+      "lines": 20,
+      "sha256": "b760843586342ed11307b325befce84ac2d549de548f2c758830df8517ab6508"
+    },
+    {
+      "id": "SRC-CASE-001",
+      "path": "policy/excerpts/SRC-CASE-001-aws-case-open-account.md",
+      "lines": 25,
+      "sha256": "8497a7fbaafeddf227eff887c7e26a486b38f8f3665f42afc19bfb5d10f68bf5"
+    },
+    {
+      "id": "SRC-CASE-002",
+      "path": "policy/excerpts/SRC-CASE-002-basic-support-technical-case.md",
+      "lines": 20,
+      "sha256": "ed769a3d7e79df5e990e885c056075764d1f19994d094eb213a49583b015bbe1"
+    },
+    {
+      "id": "SRC-K8S-001",
+      "path": "policy/excerpts/SRC-K8S-001-kubernetes-support-scope.md",
+      "lines": 20,
+      "sha256": "d359ca42e61d145467e942f0d2631443abffdd75b72f023ee0feea1c8f2880aa"
+    },
+    {
+      "id": "SRC-FTR-SPT-001",
+      "path": "policy/excerpts/SRC-FTR-SPT-001-support-operations.md",
+      "lines": 384,
+      "sha256": "96f132406e13688df71242d1a834372518e85c1aadce4f45257ef395c4a0275e"
+    },
+    {
+      "id": "SRC-FTR-ACM-001",
+      "path": "policy/excerpts/SRC-FTR-ACM-001-account-management.md",
+      "lines": 385,
+      "sha256": "6756c8bee846ec1d904fc4bfbcdb2144ee4dee946a554f8a3390c7528b7a5d39"
+    },
+    {
+      "id": "SRC-FTR-BILL-001",
+      "path": "policy/excerpts/SRC-FTR-BILL-001-billing-and-rebilling.md",
+      "lines": 269,
+      "sha256": "a92d7cf0e6596d31dae448d00e5c7d4386b6625a1e84569be8e656814bbc11dd"
+    },
+    {
+      "id": "SRC-FTR-STD-001",
+      "path": "policy/excerpts/SRC-FTR-STD-001-root-iam-cloudtrail.md",
+      "lines": 238,
+      "sha256": "35d3edf67e3449c6149fb541d904343bb7d5e8e30a57b8859efcea5dad77c2a0"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+#!/bin/sh
+# tiket pre-push guard (POSIX sh — intentionally free of any bash version requirement)
+#
+# Two independent guards:
+#   1. Hard stop: never push commits that carry workspace-owned operational data.
+#      No override exists for this guard.
+#   2. Alpha policy: the shared framework repository is the only configured remote and
+#      no personal operational remote has been approved yet, so push is blocked by
+#      default. A framework maintainer sets TIKET_ALLOW_UPSTREAM_PUSH=1 deliberately.
+#
+# Activate with: git config core.hooksPath .githooks
+
+remote_name="$1"
+remote_url="$2"
+zero="0000000000000000000000000000000000000000"
+
+# Paths that must never leave the local workspace.
+LOCAL_ONLY='^(tickets/|\.private/|policy/raw/)'
+# customers/ 는 폴더 이름이 무엇이든 막는다. 중단 안내문 하나만 나간다.
+CUSTOMERS='^customers/'
+CUSTOMERS_ALLOWED='^customers/_index\.md$'
+INBOX='^policy/inbox/'
+INBOX_ALLOWED='^policy/inbox/README\.md$'
+
+leaked=""
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+	[ -z "$local_sha" ] && continue
+	# Branch deletion carries no content.
+	[ "$local_sha" = "$zero" ] && continue
+
+	if [ "$remote_sha" = "$zero" ]; then
+		range="$local_sha --not --remotes=$remote_name"
+	else
+		range="$remote_sha..$local_sha"
+	fi
+
+	# core.quotepath=false is required: git octal-escapes non-ASCII paths by
+	# default, which would silently defeat every pattern below.
+	# shellcheck disable=SC2086
+	changed=$(git -c core.quotepath=false log --format= --name-only $range 2>/dev/null | sort -u)
+	[ -z "$changed" ] && continue
+
+	hits=$(printf '%s\n' "$changed" | grep -E "$LOCAL_ONLY" || true)
+	inbox=$(printf '%s\n' "$changed" | grep -E "$INBOX" | grep -v -E "$INBOX_ALLOWED" || true)
+
+	customers=$(printf '%s\n' "$changed" | grep -E "$CUSTOMERS" | grep -v -E "$CUSTOMERS_ALLOWED" || true)
+
+	[ -n "$hits" ] && leaked="$leaked$hits
+"
+	[ -n "$customers" ] && leaked="$leaked$customers
+"
+	[ -n "$inbox" ] && leaked="$leaked$inbox
+"
+done
+
+if [ -n "$leaked" ]; then
+	cat >&2 <<EOF
+
+push 차단: 로컬에만 보관해야 하는 자료가 commit에 포함되어 있습니다.
+
+$(printf '%s' "$leaked" | sed 's/^/  - /' | sort -u)
+
+이 자료는 고객 운영 기록·개인 매핑·회사 규정 원본입니다.
+push 하지 말고 해당 commit에서 먼저 제거하세요. 이 차단은 우회할 수 없습니다.
+
+EOF
+	exit 1
+fi
+
+if [ "${TIKET_ALLOW_UPSTREAM_PUSH:-}" != "1" ]; then
+	cat >&2 <<EOF
+
+push 차단: Alpha 단계에서는 개인 운영 저장소가 아직 없습니다.
+
+  대상 remote: ${remote_name} (${remote_url})
+
+이 remote는 모두가 공유하는 공용 프레임워크 저장소입니다.
+고객 작업은 로컬 commit으로만 쌓이고, 개인 저장소는 회사 승인 후 연결합니다.
+자세한 내용은 DISTRIBUTION.md "Alpha remote 모델"을 읽으세요.
+
+프레임워크 개선을 upstream에 올리는 담당자만 다음처럼 명시적으로 실행합니다.
+
+  TIKET_ALLOW_UPSTREAM_PUSH=1 git push ${remote_name} <branch>
+
+EOF
+	exit 1
+fi
+
+exit 0

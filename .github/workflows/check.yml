@@ -1,0 +1,73 @@
+# 푸시마다 검사기와 테스트를 돌린다 (development/plans/2026-10-04-hardening.md 3번).
+# 그 전에는 테스트가 유지보수자 PC 에서 릴리스할 때만 돌았다.
+name: check
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.9 는 macOS 기본 파이썬이다 — 동료 PC 의 세션 훅이 이것으로 돈다.
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      # 검사기는 push 가드가 켜져 있는지 본다. 온보딩이 각자 PC 에서 하는 일을 여기서도 한다.
+      - run: git config core.hooksPath .githooks
+      # 러너에는 git 사용자 이름이 없다. test_report_usage 가 그 값과 대조한다.
+      - run: git config user.name ci
+      # 테스트는 pwsh 가 없으면 .ps1 시나리오를 조용히 건너뛴다. 러너 이미지에서 빠지면 여기서 멈춘다.
+      - run: pwsh -NoProfile -Command '$PSVersionTable.PSVersion.ToString()'
+      - run: python3 scripts/validate_workspace.py
+      - name: tests
+        run: |
+          failed=0
+          for test in scripts/test_*.py; do
+            # PC 에 설치된 고객 조회 스킬을 보는 시험이다. 저장소만으로는 돌 수 없다.
+            [ "$test" = scripts/test_aws_customer_skill.py ] && continue
+            echo "::group::$test"
+            python3 "$test" || failed=1
+            echo "::endgroup::"
+          done
+          exit "$failed"
+
+  # 고객 AWS 조회 스킬(skills/aws-customer-account-ops)의 테스트 — 스킬 저장소에서 옮겨 왔다(0040).
+  # 자격 증명 코드라 Windows 에서도 돌린다. Pester 가 없으면 실행기가 실패한다 — 조용히 건너뛰지 않는다.
+  skill:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pester 5.7.1
+        shell: pwsh
+        run: Install-Module Pester -RequiredVersion 5.7.1 -Repository PSGallery -Scope CurrentUser -Force -ErrorAction Stop
+      - name: pwsh suites
+        shell: pwsh
+        run: pwsh -NoProfile -File test/run-pwsh-suites.ps1 test
+      - name: bash suites
+        if: runner.os == 'Linux'
+        run: |
+          failed=0
+          for t in test/*.test.sh; do
+            echo "::group::$t"
+            bash "$t" || failed=1
+            echo "::endgroup::"
+          done
+          exit "$failed"

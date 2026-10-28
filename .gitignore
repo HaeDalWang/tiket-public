@@ -1,0 +1,88 @@
+# macOS
+.DS_Store
+.AppleDouble
+Icon?
+
+# 자격증명 — private 저장소라도 예외 없음
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials
+credentials.json
+*credential*
+# 고객 조회 스킬의 자격 증명 *코드*와 그 테스트는 추적한다(0040) — 비밀이 아니라 비밀을 받아 오는 스크립트다.
+# 파일 이름을 하나씩 적는다. 넓히면 진짜 비밀 파일이 따라 들어온다.
+!skills/aws-customer-account-ops/get-customer-credentials.sh
+!skills/aws-customer-account-ops/get-customer-credentials.ps1
+!test/credentials-guard.test.sh
+!test/credentials-guard.test.ps1
+!test/get-customer-credentials.test.sh
+!test/get-customer-credentials.test.ps1
+*.token
+.token_cache*
+*secret*.tfvars
+config.local.*
+
+# 실행 로그 — 계정 식별자·리소스 정보가 섞일 수 있어 기본 제외
+# (durations.csv 같은 요약 산출물은 통과됨)
+**/logs/*.log
+
+# 로컬 민감 자료와 대용량 회사 규정 원본
+.private/
+policy/raw/
+policy/inbox/*
+!policy/inbox/README.md
+
+# 고객 운영 자료 — Alpha 단계에서는 로컬에만 보관한다.
+# 개인 private 운영 저장소가 회사 승인으로 생성되기 전까지 Git 추적하지 않는다.
+# 전환 절차는 DISTRIBUTION.md "Alpha remote 모델"을 따른다.
+# 폴더 이름이 무엇이든 막는다 — 가명 폴더만 막으면 실명 폴더가 나간다 (2026-10-06).
+customers/*
+!customers/_index.md
+
+# Ticket working records. Real customer content, local only.
+tickets/
+
+# Customer discovery runs. Real customer content, local only.
+excavation/
+
+# 에이전트별 로컬 설정·작업공간
+CLAUDE.local.md
+# 검토 중인 사내 초안과 개인 의견 문서. 프레임워크가 아니므로 upstream 에 올리지 않는다.
+supportdeskticket-tmp.md
+opinion-reply-templates*.md
+# 계획서·검토서는 development/plans/ 에 두고 공유한다 (development/decisions/0023).
+.claude/settings.local.json
+.claude/worktrees/
+.kiro/settings.local.json
+.hermes/local/
+
+# 인프라 상태·고객 자격증명 파일
+*.kubeconfig
+kubeconfig*
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+!*.tfvars.example
+
+# 임시 파일
+*.tmp
+*.swp
+*~
+~$*
+.~lock.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 개발 지도 — 볼 때마다 git 에서 새로 그린다 (scripts/dev_map.py)
+development/map.html
+
+# 스킬 테스트 실행기(test/run-pwsh-suites.ps1)의 기록
+.ci-records/

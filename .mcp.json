@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "aws-docs": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-proxy-for-aws@1.6.4",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--skip-auth",
+        "--read-only",
+        "--region",
+        "us-east-1",
+        "--log-level",
+        "ERROR"
+      ]
+    },
+    "exa": {
+      "type": "http",
+      "url": "https://mcp.exa.ai/mcp"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "aws-docs",
+    "exa"
+  ],
+  "permissions": {
+    "deny": [
+      "mcp__aws-docs__aws___call_aws",
+      "mcp__aws-docs__aws___run_script",
+      "mcp__aws-docs__aws___get_presigned_url",
+      "mcp__aws-docs__aws___get_tasks",
+      "mcp__aws-docs__aws___retrieve_skill"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/scripts/session_start.py\" || python \"$(git rev-parse --show-toplevel)/scripts/session_start.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

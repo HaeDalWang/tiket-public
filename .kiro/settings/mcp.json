@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "aws-docs": {
+      "command": "uvx",
+      "args": [
+        "mcp-proxy-for-aws@1.6.4",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--skip-auth",
+        "--read-only",
+        "--region",
+        "us-east-1",
+        "--log-level",
+        "ERROR"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "aws___search_documentation",
+        "aws___read_documentation",
+        "aws___list_regions",
+        "aws___get_regional_availability"
+      ],
+      "disabledTools": [
+        "aws___call_aws",
+        "aws___run_script",
+        "aws___get_presigned_url",
+        "aws___get_tasks",
+        "aws___retrieve_skill"
+      ]
+    },
+    "exa": {
+      "url": "https://mcp.exa.ai/mcp",
+      "disabled": false,
+      "autoApprove": [
+        "web_search_exa",
+        "web_fetch_exa"
+      ]
+    }
+  }
+}
